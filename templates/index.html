@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTEL Hair Color Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- Частицы фона -->
+<div class="bg-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<!-- Шапка -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <span class="logo-e">E</span>STEL
+            <span class="logo-sub">Hair Color Studio</span>
+        </div>
+        <p class="header-tagline">Виртуальная примерка цвета волос</p>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<main class="main">
+
+    <!-- Панель загрузки фото -->
+    <section class="upload-section">
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h3>Загрузите ваше фото</h3>
+                <p>Перетащите файл сюда или нажмите для выбора</p>
+                <p class="upload-hint">JPG, PNG — лучше всего подойдёт фото лица анфас</p>
+                <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+                    Выбрать фото
+                </button>
+                <input type="file" id="fileInput" accept="image/*" style="display:none">
+            </div>
+
+            <!-- Превью -->
+            <div class="preview-area" id="previewArea" style="display:none">
+                <div class="preview-images">
+                    <div class="preview-block">
+                        <p class="preview-label">Оригинал</p>
+                        <img id="originalImg" alt="Оригинал">
+                    </div>
+                    <div class="preview-arrow">→</div>
+                    <div class="preview-block">
+                        <p class="preview-label">Результат</p>
+                        <div class="result-placeholder" id="resultPlaceholder">
+                            <span>Выберите цвет</span>
+                        </div>
+                        <img id="resultImg" alt="Результат" style="display:none">
+                    </div>
+                </div>
+                <div class="preview-actions">
+                    <button class="btn-secondary" id="changePhotoBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Сменить фото
+                    </button>
+                    <button class="btn-primary" id="downloadBtn" style="display:none">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Сохранить результат
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Параметры -->
+    <section class="controls-section" id="controlsSection" style="display:none">
+        <div class="controls-card">
+            <h2 class="controls-title">Настройки</h2>
+
+            <!-- Интенсивность -->
+            <div class="control-group">
+                <label class="control-label">
+                    Интенсивность окрашивания
+                    <span class="intensity-value" id="intensityValue">75%</span>
+                </label>
+                <input type="range" id="intensitySlider" min="10" max="100" value="75" class="slider">
+                <div class="slider-marks">
+                    <span>Мягко</span>
+                    <span>Насыщенно</span>
+                </div>
+            </div>
+
+            <!-- Выбранный цвет -->
+            <div class="selected-color-info" id="selectedColorInfo" style="display:none">
+                <div class="selected-swatch" id="selectedSwatch"></div>
+                <div class="selected-details">
+                    <p class="selected-name" id="selectedName">—</p>
+                    <p class="selected-id" id="selectedId">—</p>
+                </div>
+                <button class="btn-apply" id="applyBtn">
+                    Применить
+                </button>
+            </div>
+
+            <!-- Лоадер -->
+            <div class="loading" id="loading" style="display:none">
+                <div class="loading-spinner"></div>
+                <p>Обрабатываю фото...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Каталог цветов -->
+    <section class="catalog-section" id="catalogSection" style="display:none">
+        <div class="catalog-card">
+            <div class="catalog-header">
+                <h2 class="catalog-title">Каталог красок ESTEL</h2>
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18">
+                        <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" stroke-width="2" d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="colorSearch" placeholder="Поиск оттенка...">
+                </div>
+            </div>
+
+            <!-- Табы линеек -->
+            <div class="line-tabs" id="lineTabs">
+                <button class="line-tab active" data-line="all">Все</button>
+                <button class="line-tab" data-line="De Luxe">De Luxe</button>
+                <button class="line-tab" data-line="Princess Essex">Princess Essex</button>
+                <button class="line-tab" data-line="Специальные оттенки">Специальные</button>
+            </div>
+
+            <!-- Сетка цветов -->
+            <div class="colors-grid" id="colorsGrid"></div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Уведомление -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/colors.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
